@@ -17,11 +17,23 @@ public class TaskGroup {
     @NotBlank(message = "Task group's description must be not null")
     private String description;
     private boolean done;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "group")
     private Set<Task> tasks;
 
-    protected TaskGroup() {
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private Project project;
+
+
+    public TaskGroup() {
     }
+
+    //my version of GroupWriteModel(88)
+//    public TaskGroup(String description, Set<Task> tasks) {
+//        this.description = description;
+//        this.tasks = tasks;
+//    }
 
     public int getId() {
         return id;
@@ -35,7 +47,7 @@ public class TaskGroup {
         return description;
     }
 
-    void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
@@ -51,7 +63,15 @@ public class TaskGroup {
         return tasks;
     }
 
-    void setTasks(final Set<Task> tasks) {
+    public void setTasks(final Set<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
 }

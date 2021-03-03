@@ -1,5 +1,6 @@
 package io.github.mat3e.todoapp.model;
 
+import io.github.mat3e.todoapp.model.projection.GroupTaskWriteModel;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -25,6 +26,11 @@ public class Task {
     private TaskGroup group;
 
     protected Task() {
+    }
+
+    public Task(String description, LocalDateTime deadline) {
+        this.description = description;
+        this.deadline = deadline;
     }
 
     public int getId() {

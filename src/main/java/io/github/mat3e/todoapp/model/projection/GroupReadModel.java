@@ -4,8 +4,6 @@ import io.github.mat3e.todoapp.model.Task;
 import io.github.mat3e.todoapp.model.TaskGroup;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Set;
 import java.util.stream.Collectors;
 

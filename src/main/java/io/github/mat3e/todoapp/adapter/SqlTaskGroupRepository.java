@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface SqlTaskGroupRepository extends TaskGroupRepository, JpaRepository<TaskGroup, Integer> {
@@ -16,7 +15,7 @@ public interface SqlTaskGroupRepository extends TaskGroupRepository, JpaReposito
     List<TaskGroup> findAll();
 
     @Override
-    boolean existsByDoneIsFalseAndAndProject_Id(Integer projectId);
+    boolean existsByDoneIsFalseAndProject_Id(Integer projectId);
 
 //    @Override
 //    Optional<TaskGroup> findByDoneIsFalseAndAndProject_Id(Integer projectId);

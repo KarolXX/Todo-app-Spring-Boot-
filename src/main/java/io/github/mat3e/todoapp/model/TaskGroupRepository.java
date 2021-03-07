@@ -10,7 +10,7 @@ public interface TaskGroupRepository {
 
     TaskGroup save(TaskGroup entity);
 
-    boolean existsByDoneIsFalseAndAndProject_Id(Integer projectId);
+    boolean existsByDoneIsFalseAndProject_Id(Integer projectId);
 
     //Optional<TaskGroup> findByDoneIsFalseAndAndProject_Id(Integer projectId);
 

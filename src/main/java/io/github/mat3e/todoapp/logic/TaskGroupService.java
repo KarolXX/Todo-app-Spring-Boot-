@@ -1,10 +1,10 @@
 package io.github.mat3e.todoapp.logic;
 
 import io.github.mat3e.todoapp.model.TaskGroup;
+import io.github.mat3e.todoapp.model.projection.GroupWriteModel;
 import io.github.mat3e.todoapp.model.TaskGroupRepository;
 import io.github.mat3e.todoapp.model.TaskRepository;
 import io.github.mat3e.todoapp.model.projection.GroupReadModel;
-import io.github.mat3e.todoapp.model.projection.GroupWriteModel;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class TaskGroupService {
         return new GroupReadModel(result);
     }
 
-    public List<GroupReadModel> readAllGroups() {
+    public List<GroupReadModel> readAll() {
         return repository.findAll().stream()
                 .map(GroupReadModel::new)
                 .collect(Collectors.toList());
@@ -37,8 +37,6 @@ public class TaskGroupService {
         var result = repository.findById(groupId)
                 .orElseThrow(() -> new IllegalArgumentException("Task group with given id not found"));
         result.setDone(!result.isDone());
+        repository.save(result);
     }
-
-
-
 }

@@ -1,6 +1,5 @@
 package io.github.mat3e.todoapp.model;
 
-import io.github.mat3e.todoapp.model.projection.GroupTaskWriteModel;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;

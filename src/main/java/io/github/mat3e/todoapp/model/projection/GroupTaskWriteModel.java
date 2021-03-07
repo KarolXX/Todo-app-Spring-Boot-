@@ -5,6 +5,12 @@ import io.github.mat3e.todoapp.model.Task;
 import java.time.LocalDateTime;
 
 public class GroupTaskWriteModel {
+    /*
+    when creating a task in a group, the request body will consist of
+    description and deadline (it will be in JSON)
+     with this class JSON will be serialized into GroupTaskWriteModel object.
+     (now note about GroupWriteModel.toGroup() ) : to save it in DB we need Group and Set<Task>
+     */
     private String description;
     private LocalDateTime deadline;
 

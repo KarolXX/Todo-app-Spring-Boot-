@@ -1,6 +1,5 @@
 package io.github.mat3e.todoapp.model.projection;
 
-import io.github.mat3e.todoapp.model.Task;
 import io.github.mat3e.todoapp.model.TaskGroup;
 
 import java.util.Set;

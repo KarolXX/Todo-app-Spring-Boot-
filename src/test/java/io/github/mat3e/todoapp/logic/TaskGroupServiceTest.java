@@ -58,7 +58,7 @@ class TaskGroupServiceTest {
     }
 
     @Test
-    @DisplayName("should toggle group when no undone task exsists and group with given id exists")
+    @DisplayName("should toggle group when no undone task exists and group with given id exists")
     void toggleGroup_noUndoneTaskExists_And_groupExists_toggleGroup() {
         //given
         var group = new TaskGroup();
@@ -73,6 +73,7 @@ class TaskGroupServiceTest {
 
         //when
         toTest.toggleGroup(1);
+
         //then
         assertThat(group.isDone()).isEqualTo(!doneBeforeToggle);
     }

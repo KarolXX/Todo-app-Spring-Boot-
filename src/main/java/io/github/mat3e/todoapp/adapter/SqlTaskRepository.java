@@ -2,6 +2,7 @@ package io.github.mat3e.todoapp.adapter;
 
 import io.github.mat3e.todoapp.model.Task;
 import io.github.mat3e.todoapp.model.TaskRepository;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

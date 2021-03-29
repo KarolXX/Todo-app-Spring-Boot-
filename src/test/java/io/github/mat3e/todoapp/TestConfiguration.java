@@ -53,9 +53,9 @@ class TestConfiguration {
 
             @Override
             public Task save(Task entity) {
-                int key = tasks.size() + 1;
+                int key = tasks.size();
 
-                //set id inside entity
+                //set id inside entity (default id is the same as default int - 0)
                 try {
                     var field = Task.class.getDeclaredField("id");
                     field.setAccessible(true);

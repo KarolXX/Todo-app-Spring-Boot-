@@ -78,6 +78,7 @@ public class Task {
     void setGroup(final TaskGroup group) { this.group = group; }
 
     public void partialUpdate(final Task source) {
+        //TODO why we use properties(e.g. source.description) not getters (e.g. source.getDescrition()) ?
         this.description = source.description;
         this.done = source.done;
         this.deadline = source.deadline;

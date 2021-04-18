@@ -18,6 +18,7 @@ public class Project {
 
     @OneToMany(mappedBy = "project")
     private Set<TaskGroup> groups;
+    //TODO: Can CascadeType.ALL replace the repository (14:30 zadanie 5)?
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
     private Set<ProjectStep> steps;
 

@@ -79,7 +79,7 @@ class ProjectServiceTest {
 
     @Test
     @DisplayName("should create a new group from project")
-    void createGroup_configurationOk_exsistingProject_createsAndSavesGroup() {
+    void createGroup_configurationOk_existingProject_createsAndSavesGroup() {
         //given
         var today = LocalDate.now().atStartOfDay();
         //and
@@ -146,6 +146,7 @@ class ProjectServiceTest {
         return new inMemoryGroupRepository();
     }
 
+    //here I've created nested class to add more functionality (count method) than usual TaskGroupRepository
     private static class inMemoryGroupRepository implements TaskGroupRepository {
             private int index = 0;
             private Map<Integer, TaskGroup> map = new HashMap<>();

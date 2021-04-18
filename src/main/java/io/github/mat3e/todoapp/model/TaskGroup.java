@@ -28,11 +28,6 @@ public class TaskGroup {
     public TaskGroup() {
     }
 
-    //my version of GroupWriteModel(88)
-//    public TaskGroup(String description, Set<Task> tasks) {
-//        this.description = description;
-//        this.tasks = tasks;
-//    }
 
     public int getId() {
         return id;
@@ -58,6 +53,8 @@ public class TaskGroup {
         this.done = done;
     }
 
+    // FIXME should I remove public ?
+    //  (then ObjectMapper won't serialize it on JSON every time when we fetch project)
     public Set<Task> getTasks() {
         return tasks;
     }

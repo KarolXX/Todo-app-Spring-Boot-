@@ -50,19 +50,30 @@ class TaskController {
                 orElse(ResponseEntity.notFound().build());
     }
 
+    //  The client can create a new resource or update an existing one via PUT
     @Transactional
     @PutMapping("/tasks/{id}")
     public ResponseEntity<?> updateTask(@PathVariable int id, @RequestBody @Valid Task toUpdate) {
-        if (!repository.existsById(id)) {
-            return ResponseEntity.notFound().build();
+        if (repository.existsById(id)) {
+            repository.findById(id)
+                    .ifPresent(task -> task.partialUpdate(toUpdate));
+            return ResponseEntity.noContent().build();
+        } else {
+            var result = repository.save(toUpdate);
+            return ResponseEntity.created(URI.create("/" + result.getId())).body(result);
         }
-        // version withour updatedOn, createdOn
-//        toUpdate.setId(id);
-//        repository.save(toUpdate);
-
-        repository.findById(id).ifPresent(task -> task.partialUpdate(toUpdate));
-        return ResponseEntity.noContent().build();
     }
+
+      // The client can only update an existing one via PUT
+//    @Transactional
+//    @PutMapping("/tasks/{id}")
+//    public ResponseEntity<?> updateTask(@PathVariable int id, @RequestBody @Valid Task toUpdate) {
+//        if (!repository.existsById(id)) {
+//            return ResponseEntity.notFound().build();
+//        }
+//        repository.findById(id).ifPresent(task -> task.partialUpdate(toUpdate));
+//        return ResponseEntity.noContent().build();
+//    }
 
     @Transactional
     @PatchMapping("tasks/{id}")

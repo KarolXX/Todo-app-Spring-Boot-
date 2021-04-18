@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpHeaders;
 
 import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -67,18 +69,37 @@ class TaskControllerE2ETest {
     }
 
     @Test
-    void httpPut_UpdatesTask() {
-        //given
+    void httpPut_updatesTask() {
+        // given
         int id = repo.save(new Task("foo", LocalDateTime.now())).getId();
-        //and
+        // and
         String updatedDescription = "bar";
         Task updatedTask = new Task(updatedDescription, LocalDateTime.now());
 
-        //when
+        // when
         testRestTemplate.put("http://localhost:" + port + "/tasks/{id}", updatedTask, String.valueOf(id));
 
-        //then
+        // then
         var result = repo.findById(id).get();
         assertThat(result.getDescription()).isEqualTo(updatedDescription);
+    }
+
+    // Test for case when the client can create a new resource or update an existing one via PUT
+    @Test
+    void httpPut_createsTask_returnsTask() {
+        // given
+        Integer anotherId = repo.findAll().size() + 1;
+        // and
+        String name = "created via PUT";
+        Task task = new Task(name, LocalDateTime.now());
+        // and
+
+        // when
+        testRestTemplate.put("http://localhost:" + port + "/tasks/{id}", task, anotherId);
+
+        // then
+        var result = repo.findById(anotherId)
+                .orElseThrow(() -> new NoSuchElementException("no such element in DB stored in memory"));
+        assertThat(result.getDescription()).isEqualTo(name);
     }
 }

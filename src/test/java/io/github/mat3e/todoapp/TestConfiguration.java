@@ -53,7 +53,7 @@ class TestConfiguration {
 
             @Override
             public Task save(Task entity) {
-                int key = tasks.size();
+                int key = tasks.size() + 1;
 
                 //set id inside entity (default id is the same as default int - 0)
                 try {

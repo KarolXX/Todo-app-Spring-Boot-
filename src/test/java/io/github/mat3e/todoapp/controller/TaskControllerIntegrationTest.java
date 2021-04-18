@@ -20,8 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDateTime;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -90,12 +89,32 @@ class TaskControllerIntegrationTest {
                .toString();
 
        //when + then
-       mockMvc.perform(MockMvcRequestBuilders.put("/tasks/" + id)
+       mockMvc.perform(put("/tasks/" + id)
                .content(jsonString)
                .contentType(MediaType.APPLICATION_JSON))
                .andExpect(status().isNoContent());
    }
 
+    @Test
+    void httpPut_createsTask_returnsCreatedTask() throws Exception {
+        // given
+        String description = "testing PUT method";
+        String jsonString = new JSONObject()
+                .put("description", description)
+                .put("deadline", "2021-04-20T12:43:20")
+                .toString();
+        // and
+        int anotherId = repo.findAll().size() + 1;
+
+        // when + then
+        mockMvc.perform(put("/tasks/" + anotherId)
+                .content(jsonString)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(jsonPath("$.description").value(description))
+                .andExpect(MockMvcResultMatchers.status().isCreated());
+    }
 
 
 
@@ -104,7 +123,8 @@ class TaskControllerIntegrationTest {
 
 
 
-   //NOT WORK!!!
+
+    //NOT WORK!!!
 //   private static String asJsonString(final Task task) {
 //       try {
 //           return new ObjectMapper().writeValueAsString(task);

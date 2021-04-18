@@ -14,6 +14,7 @@ interface SqlTaskRepository extends TaskRepository, JpaRepository<Task, Integer>
     @Query(nativeQuery = true, value = "select count(*) > 0 from tasks where id=:id")
     boolean existsById(@Param("id") Integer id);
 
+    //FIXME: should I delete it?
     @Override
     boolean existsByDoneIsFalseAndGroup_Id(Integer groupId);
 }

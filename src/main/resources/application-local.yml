@@ -8,3 +8,5 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+      show_sql: true
+      format_sql: true

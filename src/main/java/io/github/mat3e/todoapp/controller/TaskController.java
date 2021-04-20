@@ -14,6 +14,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@RequestMapping("/tasks") // type level is here
 class TaskController {
     private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
     private final TaskRepository repository;
@@ -22,7 +23,7 @@ class TaskController {
         this.repository = repository;
     }
 
-    @PostMapping("/tasks")
+    @PostMapping // method level is here
     ResponseEntity<Task> createNewTask(@RequestBody @Valid Task newTask) {
         logger.warn("Creating new task!");
         var result = repository.save(newTask);
@@ -30,19 +31,25 @@ class TaskController {
         return ResponseEntity.created(URI.create("/" + result.getId())).body(result);
     }
 
-    @GetMapping(value = "/tasks", params = {"!sort", "!page", "!size"})
+    @GetMapping(params = {"!sort", "!page", "!size"})
     ResponseEntity<?> readAllTasks() {
         logger.warn("Exposing all the todos!!!");
         return ResponseEntity.ok(repository.findAll());
     }
 
-    @GetMapping("/tasks")
+    @GetMapping
     ResponseEntity<List<Task>> readAllTasks(Pageable page) {
         logger.info("Custom pageable");
         return ResponseEntity.ok(repository.findAll(page).getContent());
     }
 
-    @GetMapping("/tasks/{id}")
+    @GetMapping("/search/done")
+    ResponseEntity<List<Task>> readDoneTasks(@RequestParam(defaultValue = "true") boolean state) {
+        logger.info("Custom pageable");
+        return ResponseEntity.ok(repository.findByDone(state));
+    }
+
+    @GetMapping("/{id}")
     ResponseEntity<Task> readTask(@PathVariable int id) {
         logger.warn("exposing specified todo");
         return repository.findById(id).
@@ -52,7 +59,7 @@ class TaskController {
 
     //  The client can create a new resource or update an existing one via PUT
     @Transactional
-    @PutMapping("/tasks/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> updateTask(@PathVariable int id, @RequestBody @Valid Task toUpdate) {
         if (repository.existsById(id)) {
             repository.findById(id)
@@ -66,7 +73,7 @@ class TaskController {
 
       // The client can only update an existing one via PUT
 //    @Transactional
-//    @PutMapping("/tasks/{id}")
+//    @PutMapping("/{id}")
 //    public ResponseEntity<?> updateTask(@PathVariable int id, @RequestBody @Valid Task toUpdate) {
 //        if (!repository.existsById(id)) {
 //            return ResponseEntity.notFound().build();
@@ -76,7 +83,7 @@ class TaskController {
 //    }
 
     @Transactional
-    @PatchMapping("tasks/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<?> toggleTask(@PathVariable int id){
         if (!repository.existsById(id))
             return ResponseEntity.notFound().build();

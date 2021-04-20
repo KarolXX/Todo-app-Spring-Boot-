@@ -21,8 +21,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.time.LocalDateTime;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -54,7 +53,7 @@ class TaskControllerIntegrationTest {
 
     @Test
     void httpPost_createsTask_returnsCreatedTask() throws Exception {
-        //given
+        // given
         //Task task = new Task("testing POST method", LocalDateTime.now()); I would can use it and asJsonString method to set request body (content())-NOT WORK!!! but below is alternative way
         String id = String.valueOf(repo.findAll().size());
         String jsonString = new JSONObject()
@@ -62,10 +61,9 @@ class TaskControllerIntegrationTest {
                 .put("description", "testing POST method")
                 .put("done", false)
                 .put("deadline", "2021-04-20T12:43:20")
-                .toString();
-        System.out.println(jsonString);
+        .toString();
 
-        //when + then
+        // when + then
         mockMvc.perform(post("/tasks")
            .content(jsonString)
            .contentType(MediaType.APPLICATION_JSON)

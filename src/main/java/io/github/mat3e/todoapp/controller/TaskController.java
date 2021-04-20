@@ -1,5 +1,6 @@
 package io.github.mat3e.todoapp.controller;
 
+import io.github.mat3e.todoapp.logic.TaskService;
 import io.github.mat3e.todoapp.model.Task;
 import io.github.mat3e.todoapp.model.TaskRepository;
 import org.slf4j.Logger;
@@ -12,15 +13,18 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/tasks") // type level is here
 class TaskController {
     private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
     private final TaskRepository repository;
+    private final TaskService service;
 
-    TaskController(final TaskRepository repository) {
+    TaskController(final TaskRepository repository, final TaskService service) {
         this.repository = repository;
+        this.service = service;
     }
 
     @PostMapping // method level is here
@@ -32,9 +36,9 @@ class TaskController {
     }
 
     @GetMapping(params = {"!sort", "!page", "!size"})
-    ResponseEntity<?> readAllTasks() {
+    CompletableFuture<ResponseEntity<List<Task>>> readAllTasks() {
         logger.warn("Exposing all the todos!!!");
-        return ResponseEntity.ok(repository.findAll());
+        return service.findAllAsync().thenApply(ResponseEntity::ok);
     }
 
     @GetMapping

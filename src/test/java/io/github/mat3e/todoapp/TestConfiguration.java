@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Configuration
@@ -69,6 +70,7 @@ class TestConfiguration {
                 return tasks.get(key);
             }
 
+            // TODO - complete overriding
             @Override
             public Page<Task> findAll(Pageable page) {
                 return null;
@@ -76,6 +78,16 @@ class TestConfiguration {
 
             @Override
             public List<Task> findByDone(boolean done) {
+                return null;
+            }
+
+            @Override
+            public List<Task> findTasksByGroup_Id(Integer groupId) {
+                return null;
+            }
+
+            @Override
+            public List<Task> findTasksByDoneIsFalseAndDeadlineIsNullOrDoneIsFalseAndDeadlineIsLessThanEqualOrderByDeadline(LocalDateTime date) {
                 return null;
             }
         };

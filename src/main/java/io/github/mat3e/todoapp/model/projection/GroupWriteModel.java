@@ -26,10 +26,6 @@ public class GroupWriteModel {
     }
 
     public TaskGroup toGroup() {
-        //my version of GroupWriteModel(88)
-//        Set<Task> realTasks = tasks.stream().map(GroupTaskWriteModel::toTask).collect(Collectors.toSet());
-//        return new TaskGroup(description, realTasks);
-
         var result = new TaskGroup();
         result.setDescription(description);
         result.setTasks(

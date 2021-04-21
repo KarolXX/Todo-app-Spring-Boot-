@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -51,6 +53,14 @@ class TaskController {
     ResponseEntity<List<Task>> readDoneTasks(@RequestParam(defaultValue = "true") boolean state) {
         logger.info("Custom pageable");
         return ResponseEntity.ok(repository.findByDone(state));
+    }
+
+    @GetMapping("/search/today")
+    ResponseEntity<List<Task>> readTodayTasks() {
+        LocalDateTime today = LocalDate.now().atTime(23, 59, 59, 999);
+        return ResponseEntity.ok(
+                repository.findTasksByDoneIsFalseAndDeadlineIsNullOrDoneIsFalseAndDeadlineIsLessThanEqualOrderByDeadline(today)
+        );
     }
 
     @GetMapping("/{id}")

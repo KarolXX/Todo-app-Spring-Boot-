@@ -8,6 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Repository
 interface SqlTaskRepository extends TaskRepository, JpaRepository<Task, Integer> {
     @Override
@@ -17,4 +20,6 @@ interface SqlTaskRepository extends TaskRepository, JpaRepository<Task, Integer>
     //FIXME: should I delete it?
     @Override
     boolean existsByDoneIsFalseAndGroup_Id(Integer groupId);
+
+
 }

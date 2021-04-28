@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App: projects</title>
+    <link rel="stylesheet" href="awsm.min.css">
+    <style>
+        .Bd {
+            border: solid 1px black;
+        }
+
+        .Bdc\(red\) {
+            border-color: red !important;
+        }
+
+        .C\(red\) {
+            color: red;
+        }
+
+        .P\(0\) {
+            padding: 0px;
+        }
+
+        .P\(10\) {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <h1 th:text="#{message.welcome}"></h1>
+    <h1 th:if="${msg != null}" th:text="${msg}"></h1>
+    <!--/*@thymesVar id="projects" type="java.util.List<io.github.mat3e.todoapp.model.Project>"*/-->
+    <dl th:each="project : ${projects}" class="Bd P(10px)">
+        <dt th:text="${project.description}">...</dt>
+        <dd>
+            <ul class="P(0)">
+                <li th:each="step : ${project.steps}" th:text="|${step.description} (${step.daysToDeadline} days)|"></li>
+            </ul>
+        </dd>
+    </dl>
+    <!--/*@thymesVar id="project" type="io.github.mat3e.todoapp.model.projection.ProjectWriteModel"*/-->
+    <form action="#" method="post" th:action="@{/projects}" th:object="${project}">
+        <h2 class="C(red)" th:if="${#fields.hasAnyErrors()}" th:errors="*{all}"></h2>
+        <fieldset>
+            <legend>New project</legend>
+            <label>Description
+                <input type="text" th:field="*{description}" th:errorclass="'Bdc(red)'"/>
+            </label>
+            <fieldset th:each="step,stepStat : *{steps}">
+                <legend th:text="|Step ${stepStat.index + 1}|"></legend>
+                <label>Description
+                    <input type = "text" th:field="*{steps[__${stepStat.index}__].description}" />
+                </label>
+                <label>Days to deadline
+                    <input type="number" th:field="${project.steps[__${stepStat.index}__].daysToDeadline}" />
+                </label>
+            </fieldset>
+            <div>
+                <button type="submit" name="addStep">+</button>
+            </div>
+        </fieldset>
+        <p>
+            <button type="submit">Add</button>
+            <button type="reset">Clean</button>
+        </p>
+    </form>
+</main>
+
+</body>
+</html>

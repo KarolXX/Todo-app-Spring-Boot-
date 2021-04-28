@@ -14,7 +14,7 @@ public class LoggerInterceptor implements HandlerInterceptor {
     private static final Logger logger = LoggerFactory.getLogger(LoggerInterceptor.class);
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response, Object handler) throws Exception {
         logger.info("[preHandle] " + request.getMethod() + " " + request.getRequestURI());
         return true;
     }

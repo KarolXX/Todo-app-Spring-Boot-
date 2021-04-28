@@ -19,10 +19,12 @@ public class Project {
     @OneToMany(mappedBy = "project")
     private Set<TaskGroup> groups;
     //TODO: Can CascadeType.ALL replace the repository (14:30 zadanie 5)?
+    // TAK! "mamy kaskadowość:
+    // zapis projektu skutkuje zapisem zdefiniowanych kroków, usunięcie - usunięciem itd."
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
     private Set<ProjectStep> steps;
 
-    Project() {
+    public Project() {
     }
 
     public int getId() {
@@ -37,14 +39,12 @@ public class Project {
         return description;
     }
 
-    void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
     //not public bcs we dont want ObjectMapper to serialize it on JSON every time when we fetch project (it would be an additional select)
-    //edit: i will do it public only for service
-    // FIXME
-    public Set<TaskGroup> getGroups() {
+    Set<TaskGroup> getGroups() {
         return groups;
     }
 
@@ -56,7 +56,7 @@ public class Project {
         return steps;
     }
 
-    void setSteps(Set<ProjectStep> steps) {
+    public void setSteps(Set<ProjectStep> steps) {
         this.steps = steps;
     }
 }

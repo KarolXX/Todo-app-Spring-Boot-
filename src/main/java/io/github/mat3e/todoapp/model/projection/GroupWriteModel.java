@@ -1,5 +1,6 @@
 package io.github.mat3e.todoapp.model.projection;
 
+import io.github.mat3e.todoapp.model.Project;
 import io.github.mat3e.todoapp.model.TaskGroup;
 
 import java.util.Set;
@@ -25,13 +26,15 @@ public class GroupWriteModel {
         this.tasks = tasks;
     }
 
-    public TaskGroup toGroup() {
+    public TaskGroup toGroup(final Project project) {
         var result = new TaskGroup();
         result.setDescription(description);
         result.setTasks(
                 tasks.stream()
                       .map(source -> source.toTask(result))
-                        .collect(Collectors.toSet()));
+                        .collect(Collectors.toSet())
+        );
+        result.setProject(project);
         return result;
     }
 }

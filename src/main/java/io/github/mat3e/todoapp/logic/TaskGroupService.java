@@ -1,5 +1,6 @@
 package io.github.mat3e.todoapp.logic;
 
+import io.github.mat3e.todoapp.model.Project;
 import io.github.mat3e.todoapp.model.TaskGroup;
 import io.github.mat3e.todoapp.model.projection.GroupWriteModel;
 import io.github.mat3e.todoapp.model.TaskGroupRepository;
@@ -21,7 +22,11 @@ public class TaskGroupService {
     }
 
     public GroupReadModel createGroup(GroupWriteModel group) {
-        TaskGroup result = repository.save(group.toGroup());
+        return createGroup(group, null);
+    }
+
+    GroupReadModel createGroup(GroupWriteModel group, Project project) {
+        TaskGroup result = repository.save(group.toGroup(project));
         return new GroupReadModel(result);
     }
 
@@ -37,6 +42,6 @@ public class TaskGroupService {
         var result = repository.findById(groupId)
                 .orElseThrow(() -> new IllegalArgumentException("Task group with given id not found"));
         result.setDone(!result.isDone());
-        repository.save(result);
+       // repository.save(result); this line is not commented out in the course but in controller there is @Transactional
     }
 }

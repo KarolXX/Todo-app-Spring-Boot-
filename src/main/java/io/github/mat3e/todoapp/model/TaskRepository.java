@@ -21,8 +21,6 @@ public interface TaskRepository {
 
     List<Task> findTasksByDoneIsFalseAndDeadlineIsNullOrDoneIsFalseAndDeadlineIsLessThanEqualOrderByDeadline(LocalDateTime date);
 
-
-
     Task save(Task entity);
 
     Page<Task> findAll(Pageable page);

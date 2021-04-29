@@ -4,6 +4,7 @@ import io.github.mat3e.todoapp.model.Task;
 import io.github.mat3e.todoapp.model.TaskGroup;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,6 +26,7 @@ public class GroupReadModel {
         description = source.getDescription();
         source.getTasks().stream()
                 .map(Task::getDeadline)
+                .filter(Objects::nonNull)
                 .max(LocalDateTime::compareTo)
                 .ifPresent(latestTask -> deadline = latestTask);
         tasks = source.getTasks().stream()

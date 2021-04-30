@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Groups</title>
+    <link rel="stylesheet" href="awsm.min.css">
+</head>
+<body>
+    <main>
+        <!--/*@thymesVar id="groups" type="java.util.List<io.github.mat3e.todoapp.model.projection.GroupReadModel>"*/-->
+        <dl th:each="group : ${groups}">
+            <dt>
+                <label>
+                    <input type="checkbox" />
+                    <span th:text="${group.description}"></span>
+                    <small th:text="|(${group.deadline})|"></small>
+                </label>
+                <hr>
+            </dt>
+            <dd>
+                <a th:href="@{/tasks.html(group=${group.id})}">
+                    <ul>
+                        <li th:each="task : ${group.tasks}">
+                            <span th:unless="${task.done}" th:text="${task.description}"></span>
+                            <del th:if="${task.done}" th:text="${task.description}"></del>
+                        </li>
+                    </ul>
+                </a>
+            </dd>
+        </dl>
+        <!--/*@thymesVar id="group" type="io.github.mat3e.todoapp.model.projection.GroupWriteModel"*/-->
+        <form method="post" th:action="@{/groups}" th:object="${group}">
+            <fieldset>
+                <legend>New Group</legend>
+                <label>Description
+                    <input type="text" th:field="*{description}">
+                </label>
+                <fieldset th:each="task,taskStat : *{tasks}">
+                    <legend>"| Task ${taskStat} |"</legend>
+                    <label>Description
+                        <input type="text" th:field="*{tasks[__${taskStat.index}__].description}">
+                    </label>
+                    <label>Deadline
+                        <input
+                               type="datetime-local"
+                               th:field="*{tasks[__${taskStat.index}__].deadline}"
+                               pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}" required
+                        />
+                    </label>
+                </fieldset>
+                <p>
+                    <button type="submit" name="addTask">+</button>
+                </p>
+            </fieldset>
+            <p>
+                <button type="submit">Add Group</button>
+                <button type="reset">Clean</button>
+            </p>
+        </form>
+    </main>
+</body>
+</html>

@@ -27,95 +27,84 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/groups")
-public class TaskGroupController {
+class TaskGroupController {
     private static final Logger logger = LoggerFactory.getLogger(TaskGroupController.class);
-    private TaskGroupService service;
-    private TaskRepository taskRepository;
+    private final TaskGroupService service;
+    private final TaskRepository repository;
 
-    public TaskGroupController(final TaskGroupService service, final TaskRepository taskRepository) {
+    TaskGroupController(final TaskGroupService service, final TaskRepository repository) {
         this.service = service;
-        this.taskRepository = taskRepository;
+        this.repository = repository;
     }
 
-
     @GetMapping(produces = MediaType.TEXT_HTML_VALUE)
-    String getGroupTemplate(Model model) {
+    String showGroups(Model model) {
         model.addAttribute("group", new GroupWriteModel());
         return "groups";
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.TEXT_HTML_VALUE)
+    @PostMapping(produces = MediaType.TEXT_HTML_VALUE, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     String addGroup(
             @ModelAttribute("group") @Valid GroupWriteModel current,
             BindingResult bindingResult,
             Model model
     ) {
-        if(bindingResult.hasErrors()) {
-            model.addAttribute("msg", "You can't add such group"); //FIXME Can I use there "msg" if it is in another model?    YES YOU CAN
+        if (bindingResult.hasErrors()) {
             return "groups";
         }
         service.createGroup(current);
         model.addAttribute("group", new GroupWriteModel());
         model.addAttribute("groups", getGroups());
-        model.addAttribute("msg", "The group has been added");
+        model.addAttribute("message", "Dodano grupę!");
         return "groups";
     }
 
-    @PostMapping(
-            params = "addTask",
-            //consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
-            produces = MediaType.TEXT_HTML_VALUE
-    )
-    String addTask(@ModelAttribute("group") GroupWriteModel current) {
+    @PostMapping(params = "addTask", produces = MediaType.TEXT_HTML_VALUE)
+    String addGroupTask(@ModelAttribute("group") GroupWriteModel current) {
         current.getTasks().add(new GroupTaskWriteModel());
         return "groups";
     }
 
-    @ModelAttribute("groups")
-    List<GroupReadModel> getGroups() {
-        return service.readAll();
+    @ResponseBody
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<GroupReadModel> createGroup(@RequestBody @Valid GroupWriteModel toCreate) {
+        GroupReadModel result = service.createGroup(toCreate);
+        return ResponseEntity.created(URI.create("/" + result.getId())).body(result);
     }
 
-
     @ResponseBody
-    @GetMapping(params = {"!sort", "!page", "!size"}, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<List<GroupReadModel>> readAllGroups() {
-        logger.warn("Exposing all the groups!");
         return ResponseEntity.ok(service.readAll());
     }
 
     @ResponseBody
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<List<Task>> readAllTasksByGroupId(@PathVariable int id) {
-        logger.warn("Exposing all the tasks from given group");
-        return ResponseEntity.ok(taskRepository.findTasksByGroup_Id(id));
+    ResponseEntity<List<Task>> readAllTasksFromGroup(@PathVariable int id) {
+        return ResponseEntity.ok(repository.findTasksByGroup_Id(id));
     }
 
     @ResponseBody
     @Transactional
     @PatchMapping("/{id}")
     public ResponseEntity<?> toggleGroup(@PathVariable int id) {
-        logger.info("group toggling");
         service.toggleGroup(id);
         return ResponseEntity.noContent().build();
     }
 
-    @ResponseBody
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<GroupReadModel> createGroup(@RequestBody @Valid GroupWriteModel source) {
-        logger.info("creating new group");
-        var result = service.createGroup(source);
-        return ResponseEntity.created(URI.create("/" + result.getId())).body(result);
-    }
-
     @ExceptionHandler(IllegalArgumentException.class)
-    ResponseEntity<?> illegalArgumentHandler(IllegalArgumentException e) {
+    ResponseEntity<?> handleIllegalArgument(IllegalArgumentException e) {
         return ResponseEntity.notFound().build();
     }
 
     @ExceptionHandler(IllegalStateException.class)
-    ResponseEntity<?> illegalStateHandler(IllegalStateException e) {
+    ResponseEntity<String> handleIllegalState(IllegalStateException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
+    @ModelAttribute("groups")
+    List<GroupReadModel> getGroups() {
+        return service.readAll();
     }
 }
 

@@ -2,6 +2,7 @@ package io.github.mat3e.todoapp.model.projection;
 
 import io.github.mat3e.todoapp.model.Task;
 import io.github.mat3e.todoapp.model.TaskGroup;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ public class GroupTaskWriteModel {
      */
     @NotBlank(message = "Task's description must be not null")
     private String description;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime deadline;
 
     public GroupTaskWriteModel() {

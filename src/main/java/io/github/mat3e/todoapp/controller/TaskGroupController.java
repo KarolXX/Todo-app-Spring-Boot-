@@ -62,6 +62,19 @@ public class TaskGroupController {
     }
 
     @PostMapping(
+            params = "removeTask",
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+            produces = MediaType.TEXT_HTML_VALUE
+    )
+    String removeTask(
+            @ModelAttribute("group") GroupWriteModel current,
+            @RequestParam("removeTask") int id
+    ) {
+        current.getTasks().remove(id);
+        return "groups";
+    }
+
+    @PostMapping(
             params = "addTask",
             //consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
             produces = MediaType.TEXT_HTML_VALUE

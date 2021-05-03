@@ -48,11 +48,6 @@ class TestConfiguration {
             }
 
             @Override
-            public boolean existsByDoneIsFalseAndGroup_Id(Integer groupId) {
-                return false;
-            }
-
-            @Override
             public Task save(Task entity) {
                 int key = tasks.size() + 1;
 
@@ -90,6 +85,12 @@ class TestConfiguration {
             public List<Task> findTasksByDoneIsFalseAndDeadlineIsNullOrDoneIsFalseAndDeadlineIsLessThanEqualOrderByDeadline(LocalDateTime date) {
                 return null;
             }
+
+            @Override
+            public boolean existsByDoneIsFalseAndGroup_Id(Integer groupId) {
+                return false;
+            }
+
         };
     }
 }

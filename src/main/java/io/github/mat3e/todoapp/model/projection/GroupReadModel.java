@@ -4,6 +4,8 @@ import io.github.mat3e.todoapp.model.Task;
 import io.github.mat3e.todoapp.model.TaskGroup;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -15,7 +17,7 @@ public class GroupReadModel {
      * Deadline from the latest task in group
      */
     private LocalDateTime deadline;
-    private Set<GroupTaskReadModel> tasks;
+    private List<GroupTaskReadModel> tasks;
 
     public GroupReadModel() {
 
@@ -31,7 +33,10 @@ public class GroupReadModel {
                 .ifPresent(latestTask -> deadline = latestTask);
         tasks = source.getTasks().stream()
                 .map(GroupTaskReadModel::new)
-                .collect(Collectors.toSet());
+//                .collect(Collectors.toList())
+//                .stream()
+                .sorted(Comparator.comparing(GroupTaskReadModel::getDescription))
+                .collect(Collectors.toList());
     }
 
     public int getId() {
@@ -58,11 +63,11 @@ public class GroupReadModel {
         this.deadline = deadline;
     }
 
-    public Set<GroupTaskReadModel> getTasks() {
+    public List<GroupTaskReadModel> getTasks() {
         return tasks;
     }
 
-    public void setTasks(Set<GroupTaskReadModel> tasks) {
+    public void setTasks(List<GroupTaskReadModel> tasks) {
         this.tasks = tasks;
     }
 }

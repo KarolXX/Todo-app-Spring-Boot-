@@ -8,15 +8,32 @@ import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class ProjectWriteModel {
+public class ProjectWriteAndReadModel {
+    private int id;
     @NotBlank(message = "Project's description must not be empty")
     private String description;
     @Valid
     private List<ProjectStep> steps = new ArrayList<>();
 
-    public ProjectWriteModel() {
+    public ProjectWriteAndReadModel() {
         steps.add(new ProjectStep());
+    }
+
+    public ProjectWriteAndReadModel(final Project project) {
+        id = project.getId();
+        description = project.getDescription();
+        steps = new ArrayList<>(project.getSteps());
+    }
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getDescription() {

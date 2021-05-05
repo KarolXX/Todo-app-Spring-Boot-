@@ -46,7 +46,7 @@
             </form>
         </dd>
     </dl>
-    <!--/*@thymesVar id="project" type="io.github.mat3e.todoapp.model.projection.ProjectWriteModel"*/-->
+    <!--/*@thymesVar id="project" type="io.github.mat3e.todoapp.model.projection.ProjectWriteAndReadModel"*/-->
     <form action="#" method="post" th:action="@{/projects}" th:object="${project}">
         <h2 class="C(red)" th:if="${#fields.hasAnyErrors()}" th:errors="*{all}"></h2>
         <fieldset>

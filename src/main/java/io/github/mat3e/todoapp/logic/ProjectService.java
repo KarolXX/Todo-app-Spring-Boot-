@@ -3,15 +3,13 @@ package io.github.mat3e.todoapp.logic;
 import io.github.mat3e.todoapp.TaskConfigurationProperties;
 import io.github.mat3e.todoapp.model.Project;
 import io.github.mat3e.todoapp.model.ProjectRepository;
-import io.github.mat3e.todoapp.model.ProjectStep;
 import io.github.mat3e.todoapp.model.TaskGroupRepository;
 import io.github.mat3e.todoapp.model.projection.GroupReadModel;
 import io.github.mat3e.todoapp.model.projection.GroupTaskWriteModel;
 import io.github.mat3e.todoapp.model.projection.GroupWriteModel;
-import io.github.mat3e.todoapp.model.projection.ProjectWriteAndReadModel;
+import io.github.mat3e.todoapp.model.projection.ProjectWriteModel;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,32 +27,11 @@ public class ProjectService {
         this.config = config;
     }
 
-    public List<ProjectWriteAndReadModel> readAll() {
-//        var result = repository.findAll()
-//                .stream()
-//                .flatMap(project -> project.getSteps().stream())
-//                .collect(Collectors.toList())
-//                .stream()
-//                .sorted(Comparator.comparing(ProjectStep::getDaysToDeadline))
-//                .collect(Collectors.toList());
-        return repository.findAll()
-                .stream()
-                .map(ProjectWriteAndReadModel::new)
-                .collect(Collectors.toList()).stream()
-                .map(projectWriteAndReadModel -> {
-                    ProjectWriteAndReadModel result = projectWriteAndReadModel;
-
-                    var resultSteps = result.getSteps()
-                        .stream()
-                        .sorted(Comparator.comparing(ProjectStep::getDaysToDeadline))
-                        .collect(Collectors.toList());
-
-                    result.setSteps(resultSteps);
-                    return result;
-                }).collect(Collectors.toList());
+    public List<Project> readAll() {
+        return repository.findAll();
     }
 
-    public Project save(final ProjectWriteAndReadModel toSave) {
+    public Project save(final ProjectWriteModel toSave) {
         return repository.save(toSave.toProject());
     }
 

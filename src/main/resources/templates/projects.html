@@ -36,7 +36,7 @@
         <dt th:text="${project.description}">...</dt>
         <dd>
             <ul class="P(0)">
-                <li th:each="step : ${project.steps}" th:text="|${step.description} (${step.daysToDeadline} days)|"></li>
+                <li th:each="step : ${#lists.sort(__${#lists.toList(project.steps)}__, new io.github.mat3e.todoapp.comparator.DaysToDeadlineComparator() )}" th:text="|${step.description} (${step.daysToDeadline} days)|"></li>
             </ul>
             <form method="post" th:action="@{/projects/{projectId}(projectId=${project.id})}">
                 <label>Deadline
@@ -46,7 +46,7 @@
             </form>
         </dd>
     </dl>
-    <!--/*@thymesVar id="project" type="io.github.mat3e.todoapp.model.projection.ProjectWriteAndReadModel"*/-->
+    <!--/*@thymesVar id="project" type="io.github.mat3e.todoapp.model.projection.ProjectWriteModel"*/-->
     <form action="#" method="post" th:action="@{/projects}" th:object="${project}">
         <h2 class="C(red)" th:if="${#fields.hasAnyErrors()}" th:errors="*{all}"></h2>
         <fieldset>

@@ -33,8 +33,8 @@ public class GroupReadModel {
                 .ifPresent(latestTask -> deadline = latestTask);
         tasks = source.getTasks().stream()
                 .map(GroupTaskReadModel::new)
-                .collect(Collectors.toList())
-                .stream()
+//                .collect(Collectors.toList())
+//                .stream()
                 .sorted(Comparator.comparing(GroupTaskReadModel::getDescription))
                 .collect(Collectors.toList());
     }

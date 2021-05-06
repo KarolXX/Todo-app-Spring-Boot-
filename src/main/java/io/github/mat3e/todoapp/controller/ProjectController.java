@@ -3,7 +3,8 @@ package io.github.mat3e.todoapp.controller;
 import io.github.mat3e.todoapp.logic.ProjectService;
 import io.github.mat3e.todoapp.model.Project;
 import io.github.mat3e.todoapp.model.ProjectStep;
-import io.github.mat3e.todoapp.model.projection.ProjectWriteAndReadModel;
+import io.github.mat3e.todoapp.model.projection.ProjectWriteModel;
+import org.flywaydb.core.internal.util.TimeFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,13 +26,13 @@ public class ProjectController {
 
     @GetMapping
     String getProjectTemplate(Model model) {
-        model.addAttribute("project", new ProjectWriteAndReadModel());
+        model.addAttribute("project", new ProjectWriteModel());
         return "projects";
     }
 
     @PostMapping
     String addProject(
-            @ModelAttribute("project") @Valid ProjectWriteAndReadModel current,
+            @ModelAttribute("project") @Valid ProjectWriteModel current,
             BindingResult bindingResult,
             Model model
     ) {
@@ -39,21 +40,21 @@ public class ProjectController {
             return "projects";
         }
         service.save(current);
-        model.addAttribute("project", new ProjectWriteAndReadModel());
+        model.addAttribute("project", new ProjectWriteModel());
         model.addAttribute("projects", getProjects());
         model.addAttribute("msg", "Project added!!!");
         return "projects";
     }
 
     @PostMapping(params = "addStep")
-    String addProjectStep(@ModelAttribute("project") ProjectWriteAndReadModel current) {
+    String addProjectStep(@ModelAttribute("project") ProjectWriteModel current) {
         current.getSteps().add(new ProjectStep());
         return "projects";
     }
 
     @PostMapping("/{id}")
     String createGroup(
-            @ModelAttribute("project") ProjectWriteAndReadModel current,
+            @ModelAttribute("project") ProjectWriteModel current,
             Model model,
             @PathVariable int id,
             @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime deadline
@@ -69,7 +70,7 @@ public class ProjectController {
     }
 
     @ModelAttribute("projects")
-    List<ProjectWriteAndReadModel> getProjects() {
+    List<Project> getProjects() {
         return service.readAll();
     }
 }

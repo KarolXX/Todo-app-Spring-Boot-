@@ -104,4 +104,7 @@ class TaskController {
         repository.findById(id).ifPresent(task -> task.setDone(!task.isDone()));
         return ResponseEntity.noContent().build();
     }
+
+//    @DeleteMapping("/{id}")
+//    public
 }

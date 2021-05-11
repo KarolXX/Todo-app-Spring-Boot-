@@ -70,4 +70,9 @@ public class TaskGroup {
     public void setProject(Project project) {
         this.project = project;
     }
+
+
+    public void addTask(Task task) {
+        tasks.add(task);
+    }
 }

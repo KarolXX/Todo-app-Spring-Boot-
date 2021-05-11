@@ -24,31 +24,51 @@
         .Hide {
             display: none;
         }
+        .Margins {
+            margin-right: 20%;
+            margin-top: 15px;
+        }
+        .BgC\(Black\) {
+            background-color: black;
+            color: white;
+        }
     </style>
 </head>
 <body>
     <main>
         <h2 th:if="${msg != null}" th:text="${msg}"></h2>
         <!--/*@thymesVar id="groups" type="java.util.List<io.github.mat3e.todoapp.model.projection.GroupReadModel>"*/-->
-        <dl th:each="group : ${groups}" class="Bd P(10)">
+        <dl th:each="existingGroup : ${groups}" class="Bd P(10)" th:id="${existingGroup.id}">
             <dt>
                 <label>
-                    <input type="checkbox" />
-                    <span th:text="${group.description}"></span>
-                    <small th:text="|(${group.deadline})|"></small>
+                    <form method="POST" th:action="@{/groups/{groupId}(groupId=${existingGroup.id})}">
+                        <input type="checkbox" />
+                        <button type="submit" name="toggle">Done</button>
+                    </form>
+                    <span th:text="${existingGroup.description}"></span>
+                    <small th:text="|(${existingGroup.deadline})|"></small>
                 </label>
-                <hr class="M(0)">
+                    <button class="Margins BgC(Black)" th:attr="onclick=|editGroup('${existingGroup}', '${existingGroup.id}')|">EDIT</button>
+                    <hr class="M(0)">
             </dt>
             <dd>
-                <a th:href="@{/tasks.html(group=${group.id})}">
+                <a th:href="@{/tasks.html(group=${existingGroup.id})}">
                     <ul>
-                        <li th:each="task : ${group.tasks}">
+                        <li th:each="task : ${existingGroup.tasks}">
                             <span th:unless="${task.done}" th:text="${task.description}"></span>
                             <del th:if="${task.done}" th:text="${task.description}"></del>
                         </li>
                     </ul>
                 </a>
             </dd>
+<!--            <dd>-->
+<!--                <form method="post" th:action="@{/groups}" th:object="${existingGroup}">-->
+<!--                    <label>Group description-->
+<!--                      <input type="text" th:field="*{description}" />    -->
+<!--                    </label>-->
+<!--                    <button type="submit" name="updateGroup" th:value="*{id}">UPDATE</button>-->
+<!--                  </form>-->
+<!--            </dd>-->
         </dl>
         <!--/*@thymesVar id="group" type="io.github.mat3e.todoapp.model.projection.GroupWriteModel"*/-->
         <form method="post" th:action="@{/groups}" th:object="${group}">
@@ -84,5 +104,23 @@
             </p>
         </form>
     </main>
+    <script th:inline="javascript">
+        function editGroup(groupToUpdate, id) {
+            const result = document.getElementById(id);
+            /*<![CDATA[*/
+
+            result.innerHTML = `
+                <form method="post" th:action="@{/groups}" th:object="/*[[${groupToUpdate}]]*/">
+                    <label>Input
+                        <input type="text" th:field="/*[[*{description}]]*/" />    
+                    </label>
+                    <button type="submit">Update</button>
+                </form>
+            `
+            
+            /*]]>*/
+        }
+    </script>
 </body>
 </html>
+'`

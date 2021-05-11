@@ -8,6 +8,7 @@ import io.github.mat3e.todoapp.model.TaskRepository;
 import io.github.mat3e.todoapp.model.projection.GroupReadModel;
 //import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,12 +37,19 @@ public class TaskGroupService {
                 .collect(Collectors.toList());
     }
 
+    //TODO: it is good practice to annotate this in the service layer
+    @Transactional
     public void toggleGroup(int groupId) {
-        if(taskRepository.existsByDoneIsFalseAndGroup_Id(groupId))
-            throw new IllegalStateException("Group has undone tasks. Done all the tasks first");
         var result = repository.findById(groupId)
                 .orElseThrow(() -> new IllegalArgumentException("Task group with given id not found"));
+        if(!result.isDone()) {
+            if(taskRepository.existsByDoneIsFalseAndGroup_Id(groupId))
+                throw new IllegalStateException("Group has undone tasks. Do all the tasks first");
+        }
+        else {
+            if(!taskRepository.existsByDoneIsFalseAndGroup_Id(groupId))
+                throw new IllegalStateException("All tasks in the group are done");
+        }
         result.setDone(!result.isDone());
-       // repository.save(result); this line is not commented out in the course but in controller there is @Transactional
     }
 }

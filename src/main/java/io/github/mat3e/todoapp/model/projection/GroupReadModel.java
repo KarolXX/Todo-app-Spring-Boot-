@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 public class GroupReadModel {
     private int id;
     private String description;
+    private boolean done;
     /**
      * Deadline from the latest task in group
      */
@@ -26,6 +27,7 @@ public class GroupReadModel {
     public GroupReadModel(TaskGroup source) {
         id = source.getId();
         description = source.getDescription();
+        done = source.isDone();
         source.getTasks().stream()
                 .map(Task::getDeadline)
                 .filter(Objects::nonNull)
@@ -53,6 +55,14 @@ public class GroupReadModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isDone() {
+        return done;
+    }
+
+    public void setDone(boolean done) {
+        this.done = done;
     }
 
     public LocalDateTime getDeadline() {

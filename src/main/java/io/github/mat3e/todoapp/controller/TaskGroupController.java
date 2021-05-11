@@ -3,8 +3,10 @@ package io.github.mat3e.todoapp.controller;
 import io.github.mat3e.todoapp.logic.TaskGroupService;
 import io.github.mat3e.todoapp.model.Task;
 import io.github.mat3e.todoapp.model.TaskGroup;
+import io.github.mat3e.todoapp.model.TaskGroupRepository;
 import io.github.mat3e.todoapp.model.TaskRepository;
 import io.github.mat3e.todoapp.model.projection.GroupReadModel;
+import io.github.mat3e.todoapp.model.projection.GroupTaskReadModel;
 import io.github.mat3e.todoapp.model.projection.GroupTaskWriteModel;
 import io.github.mat3e.todoapp.model.projection.GroupWriteModel;
 import org.slf4j.Logger;
@@ -24,19 +26,22 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/groups")
 public class TaskGroupController {
     private static final Logger logger = LoggerFactory.getLogger(TaskGroupController.class);
     private TaskGroupService service;
+    private TaskGroupRepository repository;
     private TaskRepository taskRepository;
 
-    public TaskGroupController(final TaskGroupService service, final TaskRepository taskRepository) {
+    public TaskGroupController(final TaskGroupService service, final TaskGroupRepository repository, final TaskRepository taskRepository) {
         this.service = service;
+        this.repository = repository;
         this.taskRepository = taskRepository;
     }
-
 
     @GetMapping(produces = MediaType.TEXT_HTML_VALUE)
     String getGroupTemplate(Model model) {
@@ -66,7 +71,7 @@ public class TaskGroupController {
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
             produces = MediaType.TEXT_HTML_VALUE
     )
-    String removeTask(
+    String removeGroupTask(
             @ModelAttribute("group") GroupWriteModel current,
             @RequestParam("removeTask") int id
     ) {
@@ -76,13 +81,36 @@ public class TaskGroupController {
 
     @PostMapping(
             params = "addTask",
-            //consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
             produces = MediaType.TEXT_HTML_VALUE
     )
-    String addTask(@ModelAttribute("group") GroupWriteModel current) {
+    String addGroupTask(@ModelAttribute("group") GroupWriteModel current) {
         current.getTasks().add(new GroupTaskWriteModel());
         return "groups";
     }
+
+    @PostMapping(value = "/{id}", params = "toggle")
+    String toggleGroup(
+            @PathVariable int id,
+            Model model,
+            @ModelAttribute("group") GroupWriteModel current
+    ) {
+        try {
+            service.toggleGroup(id);
+        } catch (IllegalStateException | IllegalArgumentException e) {
+            model.addAttribute("msg", e.getMessage());
+        }
+        return "groups";
+    }
+
+//    @PostMapping(
+//            params = "updateGroup",
+//            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+//            produces = MediaType.TEXT_HTML_VALUE
+//    )
+//    String updateGroup() {
+//
+//    }
 
     @ModelAttribute("groups")
     List<GroupReadModel> getGroups() {
@@ -92,7 +120,7 @@ public class TaskGroupController {
 
     @ResponseBody
     //TODO REMEMBER I spent all day troubleshooting the problem - my controller was returning JSON instead of HTML
-    // bcs in allow annotation I had parameter :   params = {"!sort", "!page", "!size"}
+    // bcs in below annotation I had parameter :   params = {"!sort", "!page", "!size"}
     // so every GET to this address without these params was related to this method...
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<List<GroupReadModel>> readAllGroups() {
@@ -122,6 +150,16 @@ public class TaskGroupController {
         logger.info("creating new group");
         var result = service.createGroup(source);
         return ResponseEntity.created(URI.create("/" + result.getId())).body(result);
+    }
+
+    @ResponseBody
+    @PostMapping(value = "/{id}/tasks", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<?> createGroupTask(@PathVariable int id, @RequestBody GroupTaskWriteModel groupTask) {
+        logger.info("create task in specified group");
+        var group = repository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Group with given id not found"));
+        var result = taskRepository.save(groupTask.toTask(group));
+        return ResponseEntity.created(URI.create("")).body(result);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

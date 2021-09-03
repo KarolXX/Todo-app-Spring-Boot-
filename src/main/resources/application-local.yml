@@ -16,3 +16,9 @@ spring:
       web:
         exposure:
           include: '*'
+
+  keycloack:
+    auth-server-url: 'http://localhost:8180/auth'
+    realm: 'ToDoApp'
+    resource: 'todo-spring-client'
+    public-client: true

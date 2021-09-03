@@ -21,23 +21,6 @@ import static org.assertj.core.api.Assertions.*;
 class TaskGroupServiceTest {
 
     @Test
-    @DisplayName("should throw IllegalStateException when undone task exists in group with given id")
-    void toggleGroup_undoneTaskExists_throwsIllegalStateException() {
-        //given
-        TaskRepository mockTaskRepository = taskRepositoryReturning(true);
-        //system under test
-        var toTest = new TaskGroupService(null, mockTaskRepository);
-
-        //when
-        var exception = catchThrowable(() -> toTest.toggleGroup(1));
-
-        //then
-        assertThat(exception)
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("Group has undone tasks");
-    }
-
-    @Test
     @DisplayName("should throw IllegalArgumentException when no undone task exists and no group with given id")
     void toggleGroup_noUndoneTaskExists_noGroups_throwsIllegalArgumentException() {
         //given
@@ -58,14 +41,49 @@ class TaskGroupServiceTest {
     }
 
     @Test
+    @DisplayName("should throw IllegalStateException when group with given id is undone and it's tasks include at least one undone")
+    void toggleUndoneGroup_undoneTaskExists_throwsIllegalStateException() {
+        //given
+        TaskGroupRepository mockTaskGroupRepository = taskGroupRepositoryReturning(false);
+        //and
+        TaskRepository mockTaskRepository = taskRepositoryReturning(true);
+        //system under test
+        var toTest = new TaskGroupService(mockTaskGroupRepository, mockTaskRepository);
+
+        //when
+        var exception = catchThrowable(() -> toTest.toggleGroup(1));
+
+        //then
+        assertThat(exception)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Do all the tasks first");
+    }
+
+    @Test
+    @DisplayName("should throw IllegalStateException when group with given id is done and all the tasks are done")
+    void toggleDoneGroup_noUndoneTaskExists_throwsIllegalStateException() {
+        // given
+        TaskGroupRepository mockTaskGroupRepository = taskGroupRepositoryReturning(true);
+        // and
+        TaskRepository mockTaskRepository = taskRepositoryReturning(false);
+        // system under test
+        var toTest = new TaskGroupService(mockTaskGroupRepository, mockTaskRepository);
+
+        // when
+        var exception = catchThrowable(() -> toTest.toggleGroup(1));
+
+        // then
+        assertThat(exception)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("All tasks in the group are done");
+    }
+
+    @Test
     @DisplayName("should toggle group when no undone task exists and group with given id exists")
     void toggleGroup_noUndoneTaskExists_And_groupExists_toggleGroup() {
         //given
-        var group = new TaskGroup();
-        var mockGroupRepository = mock(TaskGroupRepository.class);
-        when(mockGroupRepository.findById(anyInt()))
-                .thenReturn(Optional.of(group));
-        var doneBeforeToggle = group.isDone();
+        boolean isGroupDone = false;
+        var mockGroupRepository = taskGroupRepositoryReturning(isGroupDone);
         //and
         TaskRepository mockTaskRepository = taskRepositoryReturning(false);
         //system under test
@@ -75,12 +93,25 @@ class TaskGroupServiceTest {
         toTest.toggleGroup(1);
 
         //then
-        assertThat(group.isDone()).isEqualTo(!doneBeforeToggle);
+        assertThat(mockGroupRepository.findById(1).get()
+                .isDone()).isEqualTo(!isGroupDone);
     }
 
     private TaskRepository taskRepositoryReturning(final boolean result) {
         TaskRepository mockTaskRepository = mock(TaskRepository.class);
-        when(mockTaskRepository.existsByDoneIsFalseAndGroup_Id(anyInt())).thenReturn(result);
+        when(mockTaskRepository.existsByDoneIsFalseAndGroup_Id(anyInt()))
+                .thenReturn(result);
         return mockTaskRepository;
+    }
+
+    private TaskGroupRepository taskGroupRepositoryReturning(final boolean isDone) {
+        TaskGroup group = new TaskGroup();
+        group.setDone(isDone);
+
+        TaskGroupRepository mockTaskGroupRepository = mock(TaskGroupRepository.class);
+        when(mockTaskGroupRepository.findById(anyInt()))
+                .thenReturn(Optional.ofNullable(group));
+
+        return mockTaskGroupRepository;
     }
 }

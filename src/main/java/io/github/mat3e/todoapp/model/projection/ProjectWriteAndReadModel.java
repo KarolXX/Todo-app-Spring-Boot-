@@ -17,10 +17,12 @@ public class ProjectWriteAndReadModel {
     @Valid
     private List<ProjectStep> steps = new ArrayList<>();
 
+    // write model
     public ProjectWriteAndReadModel() {
         steps.add(new ProjectStep());
     }
 
+    // read model
     public ProjectWriteAndReadModel(final Project project) {
         id = project.getId();
         description = project.getDescription();

@@ -30,6 +30,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 @Controller
+@IllegalExceptionProcessing
 @RequestMapping("/groups")
 public class TaskGroupController {
     private static final Logger logger = LoggerFactory.getLogger(TaskGroupController.class);
@@ -117,7 +118,6 @@ public class TaskGroupController {
         return service.readAll();
     }
 
-
     @ResponseBody
     //TODO REMEMBER I spent all day troubleshooting the problem - my controller was returning JSON instead of HTML
     // bcs in below annotation I had parameter :   params = {"!sort", "!page", "!size"}
@@ -170,6 +170,14 @@ public class TaskGroupController {
     @ExceptionHandler(IllegalStateException.class)
     ResponseEntity<?> illegalStateHandler(IllegalStateException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
+    @ResponseBody
+    @DeleteMapping("/{id}")
+    ResponseEntity<?> deleteGroupTask(@PathVariable Integer id) {
+        logger.warn("TaskGroup has been deleted");
+        repository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
 

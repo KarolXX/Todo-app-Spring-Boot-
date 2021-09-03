@@ -111,7 +111,6 @@ class ProjectServiceTest {
         return new TaskGroupService(inMemoryGroupRepo, null);
     }
 
-
     private TaskGroupRepository groupRepositoryReturning(final boolean result) {
         var mockGroupRepository = mock(TaskGroupRepository.class);
         when(mockGroupRepository.existsByDoneIsFalseAndProject_Id(anyInt())).thenReturn(result);
@@ -153,6 +152,11 @@ class ProjectServiceTest {
 
             public int count() {
                 return map.values().size();
+            }
+
+            @Override
+            public void deleteById(Integer id) {
+
             }
 
             @Override

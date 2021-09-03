@@ -2,9 +2,12 @@ package io.github.mat3e.todoapp.controller;
 
 import io.github.mat3e.todoapp.logic.ProjectService;
 import io.github.mat3e.todoapp.model.Project;
+import io.github.mat3e.todoapp.model.ProjectRepository;
 import io.github.mat3e.todoapp.model.ProjectStep;
 import io.github.mat3e.todoapp.model.projection.ProjectWriteAndReadModel;
+import io.micrometer.core.annotation.Timed;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,10 +20,12 @@ import java.util.List;
 @Controller
 @RequestMapping("/projects")
 public class ProjectController {
+    private final ProjectRepository repository;
     private final ProjectService service;
 
-    public ProjectController(final ProjectService service) {
+    public ProjectController(final ProjectService service, final ProjectRepository repository) {
         this.service = service;
+        this.repository = repository;
     }
 
     @GetMapping
@@ -51,6 +56,7 @@ public class ProjectController {
         return "projects";
     }
 
+    //@Timed(value = "project.create.group", histogram = true, percentiles = {0.5, 0.95, 0.99})
     @PostMapping("/{id}")
     String createGroup(
             @ModelAttribute("project") ProjectWriteAndReadModel current,
@@ -71,5 +77,12 @@ public class ProjectController {
     @ModelAttribute("projects")
     List<ProjectWriteAndReadModel> getProjects() {
         return service.readAll();
+    }
+
+    @ResponseBody
+    @DeleteMapping("/{id}")
+    ResponseEntity<?> deleteProject(@PathVariable Integer id) {
+        repository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }

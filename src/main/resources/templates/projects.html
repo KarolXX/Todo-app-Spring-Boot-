@@ -31,7 +31,7 @@
 <main>
     <h1 th:text="#{message.welcome}"></h1>
     <h1 th:if="${msg != null}" th:text="${msg}"></h1>
-    <!--/*@thymesVar id="projects" type="java.util.List<io.github.mat3e.todoapp.model.Project>"*/-->
+    <!--/*@thymesVar id="projects" type="java.util.List<io.github.mat3e.todoapp.model.ProjectWriteAndReadModel>"*/-->
     <dl th:each="project : ${projects}" class="Bd P(10px)">
         <dt th:text="${project.description}">...</dt>
         <dd>

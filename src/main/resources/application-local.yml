@@ -17,8 +17,10 @@ spring:
         exposure:
           include: '*'
 
-  keycloack:
-    auth-server-url: 'http://localhost:8180/auth'
-    realm: 'ToDoApp'
-    resource: 'todo-spring-client'
-    public-client: true
+# IDK why it does not work - I placed keycloak config in application.properties
+#  keycloak:
+#    auth-server-url: http://localhost:8180/auth
+#    realm: ToDoApp
+#    resource: 'todo-spring-client'
+#    public-client: true
+

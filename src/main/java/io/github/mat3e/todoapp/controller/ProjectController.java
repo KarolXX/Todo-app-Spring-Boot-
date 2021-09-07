@@ -8,16 +8,20 @@ import io.github.mat3e.todoapp.model.projection.ProjectWriteAndReadModel;
 import io.micrometer.core.annotation.Timed;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 @RequestMapping("/projects")
 public class ProjectController {
     private final ProjectRepository repository;
@@ -28,10 +32,14 @@ public class ProjectController {
         this.repository = repository;
     }
 
+//    @RolesAllowed("ROLE_ADMIN")
     @GetMapping
-    String getProjectTemplate(Model model) {
-        model.addAttribute("project", new ProjectWriteAndReadModel());
-        return "projects";
+    String getProjectTemplate(Model model, Authentication auth) {
+        //if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            model.addAttribute("project", new ProjectWriteAndReadModel());
+            return "projects";
+//        }
+//        return "index";
     }
 
     @PostMapping

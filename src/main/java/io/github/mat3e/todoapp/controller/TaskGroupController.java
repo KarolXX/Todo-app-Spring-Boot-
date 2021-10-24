@@ -162,16 +162,6 @@ public class TaskGroupController {
         return ResponseEntity.created(URI.create("")).body(result);
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    ResponseEntity<?> illegalArgumentHandler(IllegalArgumentException e) {
-        return ResponseEntity.notFound().build();
-    }
-
-    @ExceptionHandler(IllegalStateException.class)
-    ResponseEntity<?> illegalStateHandler(IllegalStateException e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
-    }
-
     @ResponseBody
     @DeleteMapping("/{id}")
     ResponseEntity<?> deleteGroupTask(@PathVariable Integer id) {

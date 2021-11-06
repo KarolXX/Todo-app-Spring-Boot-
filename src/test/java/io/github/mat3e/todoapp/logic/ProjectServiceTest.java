@@ -129,12 +129,12 @@ class ProjectServiceTest {
 
     private Project projectWith(String projectDescription, Set<Integer> daysToDeadline) {
         Set<ProjectStep> steps = daysToDeadline.stream()
-            .map(days -> {
-                var step = mock(ProjectStep.class);
-                when(step.getDescription()).thenReturn("foo");
-                when(step.getDaysToDeadline()).thenReturn(days);
-                return step;
-            }).collect(Collectors.toSet());
+                .map(days -> {
+                    var step = mock(ProjectStep.class);
+                    when(step.getDescription()).thenReturn("foo");
+                    when(step.getDaysToDeadline()).thenReturn(days);
+                    return step;
+                }).collect(Collectors.toSet());
         var result = mock(Project.class);
         when(result.getDescription()).thenReturn(projectDescription);
         when(result.getSteps()).thenReturn(steps);
@@ -147,48 +147,53 @@ class ProjectServiceTest {
 
     //here I've created nested class to add more functionality (count method) than usual TaskGroupRepository
     private static class inMemoryGroupRepository implements TaskGroupRepository {
-            private int index = 0;
-            private Map<Integer, TaskGroup> map = new HashMap<>();
+        private int index = 0;
+        private Map<Integer, TaskGroup> map = new HashMap<>();
 
-            public int count() {
-                return map.values().size();
-            }
+        public int count() {
+            return map.values().size();
+        }
 
-            @Override
-            public void deleteById(Integer id) {
+        @Override
+        public void deleteById(Integer id) {
 
-            }
+        }
 
-            @Override
-            public List<TaskGroup> findAll() {
-                return new ArrayList<>(map.values());
-            }
+        @Override
+        public boolean existsByDescription(String description) {
+            return map.values().stream().anyMatch(taskGroup -> taskGroup.getDescription().equals("ContextRefreshedEvent"));
+        }
 
-            @Override
-            public Optional<TaskGroup> findById(Integer id) {
-                return Optional.ofNullable(map.get(id));
-            }
+        @Override
+        public List<TaskGroup> findAll() {
+            return new ArrayList<>(map.values());
+        }
 
-            @Override
-            public TaskGroup save(final TaskGroup entity) {
-                if (entity.getId() == 0) {
-                    try {
-                        var field = TaskGroup.class.getDeclaredField("id");
-                        field.setAccessible(true);
-                        field.set(entity, ++index);
-                    } catch (NoSuchFieldException | IllegalAccessException e) {
-                        throw new RuntimeException(e);
-                    }
+        @Override
+        public Optional<TaskGroup> findById(Integer id) {
+            return Optional.ofNullable(map.get(id));
+        }
+
+        @Override
+        public TaskGroup save(final TaskGroup entity) {
+            if (entity.getId() == 0) {
+                try {
+                    var field = TaskGroup.class.getDeclaredField("id");
+                    field.setAccessible(true);
+                    field.set(entity, ++index);
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    throw new RuntimeException(e);
                 }
-                map.put(entity.getId(), entity);
-                return entity;
             }
+            map.put(entity.getId(), entity);
+            return entity;
+        }
 
-            @Override
-            public boolean existsByDoneIsFalseAndProject_Id(Integer projectId) {
-                return map.values().stream()
-                        .filter(group -> !group.isDone())
-                        .anyMatch(group -> group.getProject() != null && group.getProject().getId() == projectId);
-            }
+        @Override
+        public boolean existsByDoneIsFalseAndProject_Id(Integer projectId) {
+            return map.values().stream()
+                    .filter(group -> !group.isDone())
+                    .anyMatch(group -> group.getProject() != null && group.getProject().getId() == projectId);
+        }
     }
 }

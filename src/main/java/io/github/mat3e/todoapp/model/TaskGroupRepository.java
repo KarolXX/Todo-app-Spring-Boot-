@@ -15,4 +15,6 @@ public interface TaskGroupRepository {
     //Optional<TaskGroup> findByDoneIsFalseAndAndProject_Id(Integer projectId);
 
     void deleteById(Integer id);
+
+    boolean existsByDescription(String description);
 }

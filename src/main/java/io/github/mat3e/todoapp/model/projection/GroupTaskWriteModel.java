@@ -22,6 +22,12 @@ public class GroupTaskWriteModel {
     public GroupTaskWriteModel() {
     }
 
+    //app use this constructor to create tasks for base group
+    public GroupTaskWriteModel(@NotBlank(message = "Task's description must be not null") String description, LocalDateTime deadline) {
+        this.description = description;
+        this.deadline = deadline;
+    }
+
     public String getDescription() {
         return description;
     }

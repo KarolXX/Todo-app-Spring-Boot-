@@ -11,9 +11,9 @@ In this project I use:
 * Keycloak (basic, simple use)
 * Thymeleaf and JavaScript for Front-End
 
-It's not a standard todoapp. Besides tasks, there are groups and projects
-*Group is just a group of tasks
-*Project is used to create groups of tasks that are repeated from time to time.
+It's not a standard todoapp. Besides tasks, there are groups and projects:
+* Group is just a group of tasks
+* Project is used to create groups of tasks that are repeated from time to time.
  In other words it's a template for creating group to avoid writing it from sratch from time to time.
  ![image](https://user-images.githubusercontent.com/71709330/162849924-fb176b0a-9e8b-4e56-98c9-ad224e62a97a.png)
 

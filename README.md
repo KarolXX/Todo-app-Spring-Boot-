@@ -29,3 +29,5 @@ Entity that contains: set of tasks (association), `@NotBlank` description, id, d
 
 ## Project
 A project is something like a group template that you create from time to time, such as a group when you go on a trip. Suppose the client goes on a trip three times a year, so instead of creating this group from scratch, the client can create a project that will only be updated with a new date and possibly new tasks before creating the new group from the exisitng project
+### Project rules:
+* whether there can be two or more undone groups from the same project at once depends on `task.template.allowMultipleTasks=true` from `application.properties`

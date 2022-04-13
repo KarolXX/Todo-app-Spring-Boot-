@@ -2,17 +2,13 @@ package io.github.mat3e.todoapp.controller;
 
 import io.github.mat3e.todoapp.logic.TaskGroupService;
 import io.github.mat3e.todoapp.model.Task;
-import io.github.mat3e.todoapp.model.TaskGroup;
 import io.github.mat3e.todoapp.model.TaskGroupRepository;
 import io.github.mat3e.todoapp.model.TaskRepository;
 import io.github.mat3e.todoapp.model.projection.GroupReadModel;
-import io.github.mat3e.todoapp.model.projection.GroupTaskReadModel;
 import io.github.mat3e.todoapp.model.projection.GroupTaskWriteModel;
 import io.github.mat3e.todoapp.model.projection.GroupWriteModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,14 +16,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.attribute.standard.Media;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 @Controller
 @IllegalExceptionProcessing
@@ -115,7 +108,7 @@ public class TaskGroupController {
 
     @ModelAttribute("groups")
     List<GroupReadModel> getGroups() {
-        return service.readAll();
+        return service.readAllGroups();
     }
 
     @ResponseBody
@@ -125,7 +118,7 @@ public class TaskGroupController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<List<GroupReadModel>> readAllGroups() {
         logger.warn("Exposing all the groups!");
-        return ResponseEntity.ok(service.readAll());
+        return ResponseEntity.ok(service.readAllGroups());
     }
 
     @ResponseBody

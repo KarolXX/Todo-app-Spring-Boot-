@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// TODO: make separate classes ProjectWriteModel and ProjectReadModel instead of this class
 public class ProjectWriteAndReadModel {
     private int id;
     @NotBlank(message = "Project's description must not be empty")

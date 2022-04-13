@@ -31,13 +31,12 @@ public class TaskGroupService {
         return new GroupReadModel(result);
     }
 
-    public List<GroupReadModel> readAll() {
+    public List<GroupReadModel> readAllGroups() {
         return repository.findAll().stream()
                 .map(GroupReadModel::new)
                 .collect(Collectors.toList());
     }
 
-    //TODO: it is good practice to annotate this in the service layer
     @Transactional
     public void toggleGroup(int groupId) {
         var result = repository.findById(groupId)

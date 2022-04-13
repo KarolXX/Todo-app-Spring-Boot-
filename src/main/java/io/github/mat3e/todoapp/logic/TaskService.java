@@ -20,7 +20,7 @@ public class TaskService {
     }
 
     @Async
-    public CompletableFuture<List<Task>> findAllAsync() {
+    public CompletableFuture<List<Task>> findAllTasksAsync() {
         logger.info("Supply async");
         return CompletableFuture.supplyAsync(repository::findAll);
     }

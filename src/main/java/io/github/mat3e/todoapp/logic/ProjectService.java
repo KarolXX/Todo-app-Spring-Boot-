@@ -29,14 +29,7 @@ public class ProjectService {
         this.config = config;
     }
 
-    public List<ProjectWriteAndReadModel> readAll() {
-//        var result = repository.findAll()
-//                .stream()
-//                .flatMap(project -> project.getSteps().stream())
-//                .collect(Collectors.toList())
-//                .stream()
-//                .sorted(Comparator.comparing(ProjectStep::getDaysToDeadline))
-//                .collect(Collectors.toList());
+    public List<ProjectWriteAndReadModel> readAllProjects() {
         return repository.findAll()
                 .stream()
                 .map(ProjectWriteAndReadModel::new)
@@ -58,7 +51,7 @@ public class ProjectService {
         return repository.save(toSave.toProject());
     }
 
-    public GroupReadModel createGroup(LocalDateTime deadline, int projectId) {
+    public GroupReadModel createGroupFromProject(LocalDateTime deadline, int projectId) {
         if (!config.getTemplate().isAllowMultipleTasks() && taskGroupRepository.existsByDoneIsFalseAndProject_Id(projectId)) {
             throw new IllegalStateException("Only one undone group from project is allowed");
         }

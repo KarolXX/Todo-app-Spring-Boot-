@@ -1,11 +1,9 @@
 package io.github.mat3e.todoapp.controller;
 
 import io.github.mat3e.todoapp.logic.ProjectService;
-import io.github.mat3e.todoapp.model.Project;
 import io.github.mat3e.todoapp.model.ProjectRepository;
 import io.github.mat3e.todoapp.model.ProjectStep;
 import io.github.mat3e.todoapp.model.projection.ProjectWriteAndReadModel;
-import io.micrometer.core.annotation.Timed;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,14 +29,10 @@ public class ProjectController {
         this.repository = repository;
     }
 
-//    @RolesAllowed("ROLE_ADMIN")
     @GetMapping
     String getProjectTemplate(Model model, Authentication auth) {
-        //if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
-            model.addAttribute("project", new ProjectWriteAndReadModel());
-            return "projects";
-//        }
-//        return "index";
+        model.addAttribute("project", new ProjectWriteAndReadModel());
+        return "projects";
     }
 
     @PostMapping
@@ -73,7 +66,7 @@ public class ProjectController {
             @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime deadline
     ) {
         try {
-            service.createGroup(deadline, id);
+            service.createGroupFromProject(deadline, id);
             model.addAttribute("msg", "New group has been created");
         } catch (IllegalStateException | IllegalArgumentException e) {
             model.addAttribute("msg", "Error when creating group from this project");
@@ -84,7 +77,7 @@ public class ProjectController {
 
     @ModelAttribute("projects")
     List<ProjectWriteAndReadModel> getProjects() {
-        return service.readAll();
+        return service.readAllProjects();
     }
 
     @ResponseBody

@@ -43,7 +43,7 @@ class TaskController {
     @GetMapping(params = {"!sort", "!page", "!size"})
     CompletableFuture<ResponseEntity<List<Task>>> readAllTasks() {
         logger.warn("Exposing all the todos!!!");
-        return service.findAllAsync().thenApply(ResponseEntity::ok);
+        return service.findAllTasksAsync().thenApply(ResponseEntity::ok);
     }
 
     @GetMapping

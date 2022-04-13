@@ -22,7 +22,7 @@ class LogicAspect {
         projectCreateGroupTimer = registry.timer("logic.project.create.group");
     }
     
-    @Pointcut("execution(* io.github.mat3e.todoapp.logic.ProjectService.createGroup(..))")
+    @Pointcut("execution(* io.github.mat3e.todoapp.logic.ProjectService.createGroupFromProject(..))")
     void projectServiceCreateGroup() {
     }
 

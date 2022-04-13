@@ -12,7 +12,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -30,7 +29,7 @@ class ProjectServiceTest {
         var toTest = new ProjectService(null, mockGroupRepository, null, mockConfig);
 
         //when
-        var exception = catchThrowable(() -> toTest.createGroup(LocalDateTime.now(), 0));
+        var exception = catchThrowable(() -> toTest.createGroupFromProject(LocalDateTime.now(), 0));
         //then
         assertThat(exception)
                 .isInstanceOf(IllegalStateException.class)
@@ -49,7 +48,7 @@ class ProjectServiceTest {
         var toTest = new ProjectService(mockRepository, null, null, mockConfig);
 
         //when
-        var exception = catchThrowable(() -> toTest.createGroup(LocalDateTime.now(), 0));
+        var exception = catchThrowable(() -> toTest.createGroupFromProject(LocalDateTime.now(), 0));
         //then
         assertThat(exception)
                 .isInstanceOf(IllegalArgumentException.class)
@@ -70,7 +69,7 @@ class ProjectServiceTest {
         var toTest = new ProjectService(mockRepository, mockGroupRepository, null, mockConfig);
 
         //when
-        var exception = catchThrowable(() -> toTest.createGroup(LocalDateTime.now(), 0));
+        var exception = catchThrowable(() -> toTest.createGroupFromProject(LocalDateTime.now(), 0));
         //then
         assertThat(exception)
                 .isInstanceOf(IllegalArgumentException.class)
@@ -97,7 +96,7 @@ class ProjectServiceTest {
         var toTest = new ProjectService(mockRepository, inMemoryGroupRepo, serviceWithInMemoryRepo, mockConfig);
 
         //when
-        GroupReadModel result = toTest.createGroup(today, 1);
+        GroupReadModel result = toTest.createGroupFromProject(today, 1);
 
         //then
         assertThat(result.getDescription()).isEqualTo("bar");

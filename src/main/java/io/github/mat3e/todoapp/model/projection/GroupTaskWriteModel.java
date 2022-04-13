@@ -12,7 +12,6 @@ public class GroupTaskWriteModel {
     when creating a task in a group, the request body will consist of
     description and deadline (it will be in JSON)
      with this class JSON will be serialized into GroupTaskWriteModel object.
-     (now note about GroupWriteModel.toGroup() ) : to save it in DB we need Group and Set<Task>
      */
     @NotBlank(message = "Task's description must be not null")
     private String description;

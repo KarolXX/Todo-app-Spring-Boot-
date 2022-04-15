@@ -1,4 +1,7 @@
 # Todo-app-Spring-Boot
+
+Before you go see the code: In this app I did not divide classes into packages by domains (tasks, groups, projects) as usual I prefer to do it, only by class roles (controller, logic, model)
+
 ### Technologies:
 * Java v. 11
 * Spring Boot v. 2.4.3 
@@ -18,7 +21,6 @@
 
 
 It's advanced todoapp. 
-
 In addition to standard tasks, there are also:
 * groups
 * projects

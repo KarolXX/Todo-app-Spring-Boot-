@@ -1,7 +1,5 @@
 # Todo-app-Spring-Boot
 
-In this app I did not divide classes into packages by domains (tasks, groups, projects) as usual I prefer to do it, only by class roles (controller, logic, model)
-
 ### Technologies:
 * Java v. 11
 * Spring Boot v. 2.4.3 
@@ -45,3 +43,6 @@ A project is something like a group template that you create from time to time, 
 ### Project rules:
 * whether there can be two or more undone groups from the same project at once depends on `task.template.allowMultipleTasks=true` from `application.properties`
 * layout that contains projects in available only for logged in users with role `ROLE_ADMIN`
+
+
+In this app I did not divide classes into packages by domains (tasks, groups, projects) as usual I prefer to do it, only by class roles (controller, logic, model)

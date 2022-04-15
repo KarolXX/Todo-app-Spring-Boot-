@@ -1,6 +1,6 @@
 # Todo-app-Spring-Boot
 
-Before you go see the code: In this app I did not divide classes into packages by domains (tasks, groups, projects) as usual I prefer to do it, only by class roles (controller, logic, model)
+In this app I did not divide classes into packages by domains (tasks, groups, projects) as usual I prefer to do it, only by class roles (controller, logic, model)
 
 ### Technologies:
 * Java v. 11

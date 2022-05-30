@@ -97,15 +97,6 @@ public class TaskGroupController {
         return "groups";
     }
 
-//    @PostMapping(
-//            params = "updateGroup",
-//            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
-//            produces = MediaType.TEXT_HTML_VALUE
-//    )
-//    String updateGroup() {
-//
-//    }
-
     @ModelAttribute("groups")
     List<GroupReadModel> getGroups() {
         return service.readAllGroups();

@@ -54,8 +54,8 @@ class TaskControllerIntegrationTest {
     @Test
     void httpPost_createsTask_returnsCreatedTask() throws Exception {
         // given
-        //Task task = new Task("testing POST method", LocalDateTime.now()); I would can use it and asJsonString method to set request body (content())-NOT WORK!!! but below is alternative way
-        String id = String.valueOf(repo.findAll().size());
+        int idInt = repo.findAll().size() + 1;
+        String id = String.valueOf(idInt);
         String jsonString = new JSONObject()
                 .put("id", id)
                 .put("description", "testing POST method")
@@ -113,21 +113,4 @@ class TaskControllerIntegrationTest {
                 .andExpect(jsonPath("$.description").value(description))
                 .andExpect(MockMvcResultMatchers.status().isCreated());
     }
-
-
-
-
-
-
-
-
-
-    //NOT WORK!!!
-//   private static String asJsonString(final Task task) {
-//       try {
-//           return new ObjectMapper().writeValueAsString(task);
-//       } catch (JsonProcessingException e) {
-//           throw new RuntimeException();
-//       }
-//   }
 }

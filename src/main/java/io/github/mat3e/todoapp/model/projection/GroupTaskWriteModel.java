@@ -8,11 +8,11 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 public class GroupTaskWriteModel {
-    /*
-    when creating a task in a group, the request body will consist of
-    description and deadline (it will be in JSON)
+    /**
+     when creating a task in a group, the request body will consist of
+     description and deadline (it will be in JSON)
      with this class JSON will be serialized into GroupTaskWriteModel object.
-     */
+    */
     @NotBlank(message = "Task's description must be not null")
     private String description;
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
@@ -21,7 +21,6 @@ public class GroupTaskWriteModel {
     public GroupTaskWriteModel() {
     }
 
-    //app use this constructor to create tasks for base group
     public GroupTaskWriteModel(@NotBlank(message = "Task's description must be not null") String description, LocalDateTime deadline) {
         this.description = description;
         this.deadline = deadline;

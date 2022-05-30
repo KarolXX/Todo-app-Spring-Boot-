@@ -81,9 +81,6 @@ public class Task {
     void setGroup(final TaskGroup group) { this.group = group; }
 
     public void partialUpdate(final Task source) {
-        // TODO why we use properties(e.g. source.description) not getters (e.g. source.getDescription()) ?
-        // EDIT: Maybe bcs we fetch these properties from JSON not from Java Object
-        // but i doubt because i think objectmapper(then JSON is deserialized) works first when updateTask() is called (look at controller)
         this.description = source.description;
         this.done = source.done;
         this.deadline = source.deadline;

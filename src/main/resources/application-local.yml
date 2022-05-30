@@ -17,7 +17,7 @@ spring:
         exposure:
           include: '*'
 
-# IDK why it does not work - I placed keycloak config in application.properties
+# I don't know why it does not work here - I placed keycloak config in application.properties and it works
 #  keycloak:
 #    auth-server-url: http://localhost:8180/auth
 #    realm: ToDoApp

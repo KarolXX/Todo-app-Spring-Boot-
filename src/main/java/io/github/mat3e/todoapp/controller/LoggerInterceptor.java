@@ -18,9 +18,4 @@ public class LoggerInterceptor implements HandlerInterceptor {
         logger.info("[preHandle] " + request.getMethod() + " " + request.getRequestURI());
         return true;
     }
-
-//    @Override
-//    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-//        logger.info("[postHandle]");
-//    }
 }

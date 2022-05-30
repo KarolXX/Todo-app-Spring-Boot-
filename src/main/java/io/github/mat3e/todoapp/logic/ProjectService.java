@@ -15,7 +15,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//@Service //(I've used @Bean in LogicConfiguration class)
+//@Service (I've used @Bean in LogicConfiguration class)
 public class ProjectService {
     private ProjectRepository repository;
     private TaskGroupRepository taskGroupRepository;

@@ -28,7 +28,6 @@ public class TaskGroup {
     public TaskGroup() {
     }
 
-
     public int getId() {
         return id;
     }
@@ -53,8 +52,6 @@ public class TaskGroup {
         this.done = done;
     }
 
-    // FIXME should I remove public ?
-    //  (then ObjectMapper won't serialize it on JSON every time when we fetch project)
     public Set<Task> getTasks() {
         return tasks;
     }

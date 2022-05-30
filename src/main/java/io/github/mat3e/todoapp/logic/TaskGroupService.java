@@ -12,7 +12,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//@Service
+//@Service (I've used @Bean in LogicConfiguration class)
 public class TaskGroupService {
     private TaskGroupRepository repository;
     private TaskRepository taskRepository;

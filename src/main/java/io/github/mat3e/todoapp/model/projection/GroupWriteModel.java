@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class GroupWriteModel {
     @NotBlank(message = "Task group's description must be not null")
     private String description;
-    @Valid
+    @Valid // provide validation to every element of collection
     private List<GroupTaskWriteModel> tasks = new ArrayList<>();
 
     public GroupWriteModel() {

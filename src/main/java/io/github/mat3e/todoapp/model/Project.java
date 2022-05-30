@@ -18,9 +18,7 @@ public class Project {
 
     @OneToMany(mappedBy = "project")
     private Set<TaskGroup> groups;
-    //TODO: Can CascadeType.ALL replace the repository (14:30 zadanie 5)?
-    // TAK! "mamy kaskadowość:
-    // zapis projektu skutkuje zapisem zdefiniowanych kroków, usunięcie - usunięciem itd."
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
     private Set<ProjectStep> steps;
 

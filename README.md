@@ -1,5 +1,6 @@
 # Todo-app-Spring-Boot
 ### This project was made for educational purposes so some features like filter, interceptor or aspect that only log the request method and URI may seem nonsensial
+### In this app I did not divide classes into packages by domains (task, group, project) as usual I prefer to do it, only by class roles (controller, logic, model).
 ### Technologies:
 * Java v. 11
 * Spring Boot v. 2.4.3 
@@ -43,7 +44,4 @@ A project is something like a group template that you create from time to time, 
 ### Project rules:
 * whether there can be two or more undone groups from the same project at once depends on `task.template.allowMultipleTasks=true` from `application.properties`
 * layout that contains projects in available only for logged in users with role `ROLE_ADMIN`
-
-## Other information about this app:
-* In this app I did not divide classes into packages by domains (task, group, project) as usual I prefer to do it, only by class roles (controller, logic, model).
 

@@ -103,9 +103,6 @@ public class TaskGroupController {
     }
 
     @ResponseBody
-    //TODO REMEMBER I spent all day troubleshooting the problem - my controller was returning JSON instead of HTML
-    // bcs in below annotation I had parameter :   params = {"!sort", "!page", "!size"}
-    // so every GET to this address without these params was related to this method...
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<List<GroupReadModel>> readAllGroups() {
         logger.warn("Exposing all the groups!");

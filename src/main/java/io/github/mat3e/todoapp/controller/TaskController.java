@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
-@RequestMapping("/tasks") // type level is here
+@RequestMapping("/tasks")
 class TaskController {
     private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
     private final TaskRepository repository;
@@ -32,11 +32,10 @@ class TaskController {
         this.eventPublisher = eventPublisher;
     }
 
-    @PostMapping // method level is here
+    @PostMapping
     ResponseEntity<Task> createNewTask(@RequestBody @Valid Task newTask) {
         logger.warn("Creating new task!");
         var result = repository.save(newTask);
-        //var result = newTask.getId(); we should use object returned from save( ) for further operations !!! (zad 2: 5:35)
         return ResponseEntity.created(URI.create("/" + result.getId())).body(result);
     }
 
@@ -74,7 +73,6 @@ class TaskController {
                 orElse(ResponseEntity.notFound().build());
     }
 
-    //  The client can create a new resource or update an existing one via PUT
     @Transactional
     @PutMapping("/{id}")
     public ResponseEntity<?> updateTask(@PathVariable int id, @RequestBody @Valid Task toUpdate) {
@@ -88,17 +86,6 @@ class TaskController {
         }
     }
 
-      // The client can only update an existing one via PUT
-//    @Transactional
-//    @PutMapping("/{id}")
-//    public ResponseEntity<?> updateTask(@PathVariable int id, @RequestBody @Valid Task toUpdate) {
-//        if (!repository.existsById(id)) {
-//            return ResponseEntity.notFound().build();
-//        }
-//        repository.findById(id).ifPresent(task -> task.partialUpdate(toUpdate));
-//        return ResponseEntity.noContent().build();
-//    }
-
     @Transactional
     @PatchMapping("/{id}")
     public ResponseEntity<?> toggleTask(@PathVariable int id) {
@@ -109,7 +96,4 @@ class TaskController {
                 .ifPresent(eventPublisher::publishEvent);
         return ResponseEntity.noContent().build();
     }
-
-//    @DeleteMapping("/{id}")
-//    public
 }

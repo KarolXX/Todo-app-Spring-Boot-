@@ -45,7 +45,7 @@ class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
-        http.csrf().disable().authorizeRequests() // FIXME: Can I disable csrf and rely only on CORS
+        http.csrf().disable().authorizeRequests() // FIXME: Can I disable csrf and rely only on CORS ?
                 //.antMatchers("/info/*").hasRole("USER")
                 //.antMatchers("/projects").hasRole("ADMIN")
                 .anyRequest()
